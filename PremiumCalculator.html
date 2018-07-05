@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<script>
+function getSelectedValue(name)
+{
+	var valueSelected;
+	var radios = document.getElementsByName(name);
+	for (var i = 0, length = radios.length; i < length; i++)
+	{
+	 	if (radios[i].checked)
+ 		{
+ 	 		valueSelected= radios[i].value;
+  			break;
+ 		}
+	}
+	return valueSelected;
+}
+<!-- Responsible to hit the Rest API using XMLHttpRequest -->
+function calculatePremium() {
+	var result;
+	var xhttp = new XMLHttpRequest();
+	var url = "http://localhost:3000/tal/";
+	var age = document.getElementById("age").value;
+	url+= age;
+	var gender = getSelectedValue("sex");
+
+	url+= "/" + gender + "/premium";
+	xhttp.onreadystatechange = function() {
+   	if (this.readyState == 4 && this.status == 200) {
+       		result= this.responseText; }
+	else if (this.readyState == 4 && this.status == 400) {
+       		result= this.responseText; }
+	document.getElementById("resultBar").innerHTML="Premium calculated is: " + result;  
+	};
+    	xhttp.open("GET", url, true);
+   	xhttp.setRequestHeader("Content-type", "application/json");
+    	xhttp.send();
+}
+</script>
+<body>
+
+
+
+
+<h1>TAL Premium Calculator</h1>
+
+<p>Calculate the premium base on filling the following form.</p>
+
+<table cellpadding="2" width="50%" border="10" align="center"cellspacing="2">
+
+<tr>
+<td colspan=2>
+<center><font size=4><b>Personal Information</b></font></center>
+</td>
+</tr>
+
+<tr>
+<td>Name</td>
+<td><input type=text name=textnames id="textname" size="30"></td>
+</tr>
+
+<tr>
+<td>Age</td>
+<td><input type="text" name="age" id="age"
+size="30"></td>
+</tr>
+
+<tr>
+<td>Sex</td>
+<td><input type="radio" name="sex" value="MALE" size="10" checked>Male
+<input type="radio" name="sex" value="FEMALE" size="10">Female
+<input type="radio" name="sex" value="OTHER" size="10">Others</td>
+</tr>
+
+
+<tr>
+<td>DOB</td>
+<td><input type="text" name="dob" id="dob" size="30"></td>
+</tr>
+</table>
+<button onclick="calculatePremium()">Calculate Premium</button>
+
+</br> </br>
+<div id="resultBar"></p>
+
+
+</body>
+</html>
